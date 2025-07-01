@@ -64,43 +64,43 @@ export default function PostJobPage() {
   if (step === 1) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <header className="bg-white border-b">
-          <div className="container mx-auto px-4 py-4">
-            <Button variant="ghost" onClick={() => router.back()} className="mb-2">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Dashboard
-            </Button>
-            <h1 className="text-2xl font-bold">Post a New Job</h1>
+        <header className="flex items-center justify-between px-0 md:px-8 py-6 bg-white/90 shadow-sm border-b">
+          <div className="container mx-auto flex items-center justify-between px-4">
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" onClick={() => router.back()} className="rounded-full bg-green-50 hover:bg-green-100 text-green-700 font-semibold shadow-none">
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                Back to Dashboard
+              </Button>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 ml-2">Post a New Job</h1>
+            </div>
           </div>
         </header>
-
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 py-10">
           <div className="max-w-2xl mx-auto">
-            <Card>
+            <Card className="shadow-xl rounded-2xl border-l-4 border-l-green-500 bg-white/80 backdrop-blur-md">
               <CardHeader>
-                <CardTitle>Job Details</CardTitle>
-                <CardDescription>Tell us about the job you need help with</CardDescription>
+                <CardTitle className="text-xl font-bold text-gray-900">Job Details</CardTitle>
+                <CardDescription className="text-gray-600">Tell us about the job you need help with</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-8">
                 <div className="space-y-2">
                   <Label htmlFor="category">Job Category</Label>
                   <Select
                     value={formData.category}
                     onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="rounded-lg border-gray-300 focus:ring-2 focus:ring-green-200">
                       <SelectValue placeholder="Select job category" />
                     </SelectTrigger>
                     <SelectContent>
                       {jobCategories.map((category) => (
-                        <SelectItem key={category} value={category}>
+                        <SelectItem key={category} value={category} className="rounded-md">
                           {category}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="title">Job Title</Label>
                   <Input
@@ -108,31 +108,32 @@ export default function PostJobPage() {
                     placeholder="e.g., Weekly house cleaning"
                     value={formData.title}
                     onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
+                    className="rounded-lg border-gray-300 focus:ring-2 focus:ring-green-200"
                   />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="location">Location</Label>
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                    <span className="absolute left-3 top-3 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                      <MapPin className="w-4 h-4 text-green-600" />
+                    </span>
                     <Input
                       id="location"
                       placeholder="Enter your address or area"
-                      className="pl-10"
+                      className="pl-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-green-200"
                       value={formData.location}
                       onChange={(e) => setFormData((prev) => ({ ...prev, location: e.target.value }))}
                     />
                   </div>
                 </div>
-
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="payType">Payment Type</Label>
                     <Select
                       value={formData.payType}
                       onValueChange={(value) => setFormData((prev) => ({ ...prev, payType: value }))}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="rounded-lg border-gray-300 focus:ring-2 focus:ring-green-200">
                         <SelectValue placeholder="Select payment type" />
                       </SelectTrigger>
                       <SelectContent>
@@ -147,21 +148,22 @@ export default function PostJobPage() {
                   <div className="space-y-2">
                     <Label htmlFor="payAmount">Amount (KSh)</Label>
                     <div className="relative">
-                      <DollarSign className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                      <span className="absolute left-3 top-3 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                        <DollarSign className="w-4 h-4 text-green-600" />
+                      </span>
                       <Input
                         id="payAmount"
                         type="number"
                         placeholder="2500"
-                        className="pl-10"
+                        className="pl-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-green-200"
                         value={formData.payAmount}
                         onChange={(e) => setFormData((prev) => ({ ...prev, payAmount: e.target.value }))}
                       />
                     </div>
                   </div>
                 </div>
-
                 <Button
-                  className="w-full"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-md py-3 text-lg"
                   onClick={() => setStep(2)}
                   disabled={
                     !formData.category ||
@@ -184,33 +186,36 @@ export default function PostJobPage() {
   if (step === 2) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <header className="bg-white border-b">
-          <div className="container mx-auto px-4 py-4">
-            <Button variant="ghost" onClick={() => setStep(1)} className="mb-2">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-            <h1 className="text-2xl font-bold">Schedule & Requirements</h1>
+        <header className="flex items-center justify-between px-0 md:px-8 py-6 bg-white/90 shadow-sm border-b">
+          <div className="container mx-auto flex items-center justify-between px-4">
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" onClick={() => setStep(1)} className="rounded-full bg-green-50 hover:bg-green-100 text-green-700 font-semibold shadow-none">
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                Back
+              </Button>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 ml-2">Schedule & Requirements</h1>
+            </div>
           </div>
         </header>
-
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 py-10">
           <div className="max-w-2xl mx-auto">
-            <Card>
+            <Card className="shadow-xl rounded-2xl border-l-4 border-l-blue-500 bg-white/80 backdrop-blur-md">
               <CardHeader>
-                <CardTitle>When do you need this work done?</CardTitle>
-                <CardDescription>Set your schedule and requirements</CardDescription>
+                <CardTitle className="text-xl font-bold text-gray-900">When do you need this work done?</CardTitle>
+                <CardDescription className="text-gray-600">Set your schedule and requirements</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-2 gap-4">
+              <CardContent className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="startDate">Start Date</Label>
                     <div className="relative">
-                      <Calendar className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                      <span className="absolute left-3 top-3 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                        <Calendar className="w-4 h-4 text-blue-600" />
+                      </span>
                       <Input
                         id="startDate"
                         type="date"
-                        className="pl-10"
+                        className="pl-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-200"
                         value={formData.startDate}
                         onChange={(e) => setFormData((prev) => ({ ...prev, startDate: e.target.value }))}
                       />
@@ -219,32 +224,34 @@ export default function PostJobPage() {
                   <div className="space-y-2">
                     <Label htmlFor="endDate">End Date (Optional)</Label>
                     <div className="relative">
-                      <Calendar className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                      <span className="absolute left-3 top-3 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                        <Calendar className="w-4 h-4 text-blue-600" />
+                      </span>
                       <Input
                         id="endDate"
                         type="date"
-                        className="pl-10"
+                        className="pl-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-200"
                         value={formData.endDate}
                         onChange={(e) => setFormData((prev) => ({ ...prev, endDate: e.target.value }))}
                       />
                     </div>
                   </div>
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="workHours">Work Hours</Label>
                   <div className="relative">
-                    <Clock className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                    <span className="absolute left-3 top-3 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Clock className="w-4 h-4 text-blue-600" />
+                    </span>
                     <Input
                       id="workHours"
                       placeholder="e.g., 9:00 AM - 5:00 PM"
-                      className="pl-10"
+                      className="pl-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-200"
                       value={formData.workHours}
                       onChange={(e) => setFormData((prev) => ({ ...prev, workHours: e.target.value }))}
                     />
                   </div>
                 </div>
-
                 <div className="space-y-3">
                   <Label>Requirements (Select all that apply)</Label>
                   <div className="grid grid-cols-1 gap-3">
@@ -254,6 +261,7 @@ export default function PostJobPage() {
                           id={requirement}
                           checked={formData.requirements.includes(requirement)}
                           onCheckedChange={() => handleRequirementToggle(requirement)}
+                          className="rounded-md border-blue-300 focus:ring-2 focus:ring-blue-200"
                         />
                         <Label htmlFor={requirement} className="text-sm">
                           {requirement}
@@ -262,15 +270,14 @@ export default function PostJobPage() {
                     ))}
                   </div>
                 </div>
-
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="preferredLanguage">Preferred Language</Label>
                     <Select
                       value={formData.preferredLanguage}
                       onValueChange={(value) => setFormData((prev) => ({ ...prev, preferredLanguage: value }))}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-200">
                         <SelectValue placeholder="Any language" />
                       </SelectTrigger>
                       <SelectContent>
@@ -290,7 +297,7 @@ export default function PostJobPage() {
                       value={formData.preferredGender}
                       onValueChange={(value) => setFormData((prev) => ({ ...prev, preferredGender: value }))}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-200">
                         <SelectValue placeholder="No preference" />
                       </SelectTrigger>
                       <SelectContent>
@@ -301,9 +308,8 @@ export default function PostJobPage() {
                     </Select>
                   </div>
                 </div>
-
                 <Button
-                  className="w-full"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md py-3 text-lg"
                   onClick={() => setStep(3)}
                   disabled={!formData.startDate || !formData.workHours}
                 >
@@ -320,50 +326,51 @@ export default function PostJobPage() {
   // Step 3 - Review and Post
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Button variant="ghost" onClick={() => setStep(2)} className="mb-2">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
-          <h1 className="text-2xl font-bold">Review & Post Job</h1>
+      <header className="flex items-center justify-between px-0 md:px-8 py-6 bg-white/90 shadow-sm border-b">
+        <div className="container mx-auto flex items-center justify-between px-4">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" onClick={() => setStep(2)} className="rounded-full bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold shadow-none">
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              Back
+            </Button>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 ml-2">Review & Post Job</h1>
+          </div>
         </div>
       </header>
-
-      <div className="container mx-auto px-4 py-6">
-        <div className="max-w-2xl mx-auto space-y-6">
-          <Card>
+      <div className="container mx-auto px-4 py-10">
+        <div className="max-w-2xl mx-auto space-y-8">
+          <Card className="shadow-xl rounded-2xl border-l-4 border-l-purple-500 bg-white/80 backdrop-blur-md">
             <CardHeader>
-              <CardTitle>Job Summary</CardTitle>
-              <CardDescription>Review your job details before posting</CardDescription>
+              <CardTitle className="text-xl font-bold text-gray-900">Job Summary</CardTitle>
+              <CardDescription className="text-gray-600">Review your job details before posting</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label className="text-sm font-medium text-gray-600">Category</Label>
-                  <p className="text-lg">{formData.category}</p>
+                  <p className="text-lg font-semibold text-gray-900">{formData.category}</p>
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-gray-600">Title</Label>
-                  <p className="text-lg">{formData.title}</p>
+                  <p className="text-lg font-semibold text-gray-900">{formData.title}</p>
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-gray-600">Location</Label>
-                  <p className="text-lg">{formData.location}</p>
+                  <p className="text-lg font-semibold text-gray-900">{formData.location}</p>
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-gray-600">Payment</Label>
-                  <p className="text-lg">
+                  <p className="text-lg font-semibold text-gray-900">
                     KSh {formData.payAmount} {formData.payType}
                   </p>
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-gray-600">Start Date</Label>
-                  <p className="text-lg">{formData.startDate}</p>
+                  <p className="text-lg font-semibold text-gray-900">{formData.startDate}</p>
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-gray-600">Work Hours</Label>
-                  <p className="text-lg">{formData.workHours}</p>
+                  <p className="text-lg font-semibold text-gray-900">{formData.workHours}</p>
                 </div>
               </div>
 
@@ -372,7 +379,7 @@ export default function PostJobPage() {
                   <Label className="text-sm font-medium text-gray-600">Requirements</Label>
                   <ul className="list-disc list-inside mt-1 space-y-1">
                     {formData.requirements.map((req) => (
-                      <li key={req} className="text-sm">
+                      <li key={req} className="text-sm text-gray-800">
                         {req}
                       </li>
                     ))}
@@ -382,9 +389,9 @@ export default function PostJobPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="shadow-xl rounded-2xl border-l-4 border-l-green-500 bg-white/80 backdrop-blur-md">
             <CardHeader>
-              <CardTitle>Estimated Cost</CardTitle>
+              <CardTitle className="text-xl font-bold text-gray-900">Estimated Cost</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
@@ -399,21 +406,16 @@ export default function PostJobPage() {
                 <div className="border-t pt-2 flex justify-between font-semibold">
                   <span>Total Cost</span>
                   <span>
-                    KSh {Number.parseInt(formData.payAmount) + Math.round(Number.parseInt(formData.payAmount) * 0.05)}
+                    KSh {Number(formData.payAmount) + Math.round(Number.parseInt(formData.payAmount) * 0.05)}
                   </span>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <div className="flex space-x-4">
-            <Button variant="outline" className="flex-1 bg-transparent" onClick={() => setStep(2)}>
-              Edit Job
-            </Button>
-            <Button className="flex-1" onClick={() => router.push("/employer/dashboard")}>
-              Post Job
-            </Button>
-          </div>
+          <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-md py-3 text-lg">
+            Post Job
+          </Button>
         </div>
       </div>
     </div>
