@@ -23,11 +23,13 @@ import {
   Calendar,
   Shield,
 } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
 
 export default function SignUpPage() {
   const searchParams = useSearchParams()
   const initialRole = searchParams.get("role") || ""
   const router = useRouter()
+  const { register, loading, error, clearError } = useAuth()
 
   const [step, setStep] = useState(1)
   const [role, setRole] = useState(initialRole)
@@ -39,6 +41,13 @@ export default function SignUpPage() {
     skills: [] as string[],
     availability: [] as string[],
   })
+  const [account, setAccount] = useState({
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+  })
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const languages = [
     { value: "en", label: "English" },
@@ -79,6 +88,26 @@ export default function SignUpPage() {
         : [...prev.availability, day],
     }))
   }
+
+  const handleSignup = async () => {
+    setSubmitError(null);
+    clearError();
+    try {
+      await register({
+        firstName: account.firstName,
+        lastName: account.lastName,
+        email: account.email,
+        password: account.password,
+        role: role === "worker" ? "user" : "employer",
+        phone: formData.phone,
+        location: formData.location,
+      });
+      // Redirect to login page instead of dashboard
+      router.push("/auth/login?success=registered");
+    } catch (err: any) {
+      setSubmitError(err.message || "Registration failed");
+    }
+  };
 
   if (step === 1) {
     return (
@@ -299,13 +328,32 @@ export default function SignUpPage() {
                   </div>
                 </div>
 
+                <div className="space-y-2">
+                  <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">First Name</Label>
+                  <Input id="firstName" placeholder="First Name" value={account.firstName} onChange={e => setAccount(a => ({ ...a, firstName: e.target.value }))} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">Last Name</Label>
+                  <Input id="lastName" placeholder="Last Name" value={account.lastName} onChange={e => setAccount(a => ({ ...a, lastName: e.target.value }))} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email</Label>
+                  <Input id="email" type="email" placeholder="you@email.com" value={account.email} onChange={e => setAccount(a => ({ ...a, email: e.target.value }))} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-sm font-medium text-gray-700">Password</Label>
+                  <Input id="password" type="password" placeholder="Password" value={account.password} onChange={e => setAccount(a => ({ ...a, password: e.target.value }))} />
+                </div>
+
                 <Button
                   className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg transition-all duration-300"
                   onClick={() => setStep(3)}
-                  disabled={!formData.phone || !formData.name || !formData.language || !formData.location}
+                  disabled={!formData.phone || !formData.name || !formData.language || !formData.location || !account.email || !account.password || !account.firstName || !account.lastName}
                 >
                   Continue
                 </Button>
+                {submitError && <div className="text-red-600 text-sm text-center mt-2">{submitError}</div>}
+                {error && <div className="text-red-600 text-sm text-center mt-2">{error}</div>}
               </CardContent>
             </Card>
           </div>
@@ -463,11 +511,66 @@ export default function SignUpPage() {
 
                 <Button
                   className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg transition-all duration-300"
-                  onClick={() => setStep(5)}
-                  disabled={formData.availability.length === 0}
+                  onClick={handleSignup}
+                  disabled={formData.availability.length === 0 || loading}
                 >
-                  Complete Registration
+                  {loading ? "Creating Account..." : "Complete Registration"}
                 </Button>
+                {submitError && <div className="text-red-600 text-sm text-center mt-2">{submitError}</div>}
+                {error && <div className="text-red-600 text-sm text-center mt-2">{error}</div>}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (step === 3 && role === "employer") {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-green-400/20 to-emerald-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-teal-400/20 to-cyan-400/20 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
+          <div className="w-full max-w-md">
+            <Card className="backdrop-blur-xl bg-white/80 border-0 shadow-2xl">
+              <CardHeader className="text-center pb-4">
+                <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <CheckCircle className="w-10 h-10 text-white" />
+                </div>
+                <CardTitle className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                  Ready to Create Account!
+                </CardTitle>
+                <CardDescription className="text-gray-600 text-lg">Complete your registration as an employer</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="text-center py-4">
+                  <div className="space-y-4">
+                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                      <p className="text-green-800 font-medium">Review your information:</p>
+                      <p className="text-green-600 text-sm mt-1">
+                        Name: {account.firstName} {account.lastName}<br/>
+                        Email: {account.email}<br/>
+                        Phone: {formData.phone}<br/>
+                        Location: {formData.location}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <Button
+                  className="w-full h-12 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg transition-all duration-300"
+                  onClick={handleSignup}
+                  disabled={loading}
+                >
+                  {loading ? "Creating Account..." : "Create Account"}
+                </Button>
+                {submitError && <div className="text-red-600 text-sm text-center mt-2">{submitError}</div>}
+                {error && <div className="text-red-600 text-sm text-center mt-2">{error}</div>}
               </CardContent>
             </Card>
           </div>
@@ -503,7 +606,7 @@ export default function SignUpPage() {
                   <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                     <p className="text-green-800 font-medium">Your account has been created successfully!</p>
                     <p className="text-green-600 text-sm mt-1">
-                      You can now start {role === "worker" ? "finding jobs" : "hiring workers"} on WorkConnect.
+                      Please sign in to start {role === "worker" ? "finding jobs" : "hiring workers"} on WorkConnect.
                     </p>
                   </div>
 
@@ -523,14 +626,10 @@ export default function SignUpPage() {
               <Button
                 className="w-full h-12 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg transition-all duration-300"
                 onClick={() => {
-                  if (role === "worker") {
-                    router.push("/worker/dashboard")
-                  } else {
-                    router.push("/employer/dashboard")
-                  }
+                  router.push("/auth/login?success=registered")
                 }}
               >
-                Get Started
+                Sign In to Continue
               </Button>
 
               <div className="text-center text-sm text-gray-500">You can update your profile anytime in settings</div>

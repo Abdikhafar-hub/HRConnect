@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,13 +9,18 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Users, Briefcase, Phone, Globe, ArrowRight, Shield, Zap } from "lucide-react"
+import { Users, Briefcase, Phone, Globe, ArrowRight, Shield, Zap, CheckCircle } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
 
 export default function LoginPage() {
   const router = useRouter()
-  const [phone, setPhone] = useState("")
-  const [language, setLanguage] = useState("")
-  const [role, setRole] = useState("")
+  const searchParams = useSearchParams()
+  const { login, loading, error, clearError } = useAuth()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  
+  const showSuccessMessage = searchParams.get("success") === "registered"
 
   const languages = [
     { value: "en", label: "English" },
@@ -26,14 +31,20 @@ export default function LoginPage() {
     { value: "fr", label: "Français" },
   ]
 
-  const handleLogin = () => {
-    // Demo login - redirect based on role
-    if (role === "worker") {
-      router.push("/worker/dashboard")
-    } else if (role === "employer") {
-      router.push("/employer/dashboard")
-    } else if (role === "admin") {
-      router.push("/admin/dashboard")
+  const handleLogin = async () => {
+    setSubmitError(null)
+    clearError()
+    try {
+      const response = await login({ email, password })
+      if (response.user.role === "user") {
+        router.push("/worker/dashboard")
+      } else if (response.user.role === "employer") {
+        router.push("/employer/dashboard")
+      } else if (response.user.role === "admin") {
+        router.push("/admin/dashboard")
+      }
+    } catch (err: any) {
+      setSubmitError(err.message || "Login failed")
     }
   }
 
@@ -64,86 +75,43 @@ export default function LoginPage() {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            {/* Role Selection */}
-            <div className="space-y-3">
-              <Label className="text-sm font-semibold text-gray-700">Choose your role</Label>
-              <div className="grid grid-cols-2 gap-3">
-                <Button
-                  variant={role === "worker" ? "default" : "outline"}
-                  className={`h-20 flex flex-col transition-all duration-200 ${
-                    role === "worker"
-                      ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg shadow-blue-500/25"
-                      : "hover:bg-blue-50 hover:border-blue-200"
-                  }`}
-                  onClick={() => setRole("worker")}
-                >
-                  <Users className="w-6 h-6 mb-2" />
-                  <span className="text-sm font-medium">Worker</span>
-                  <span className="text-xs opacity-75">Find Jobs</span>
-                </Button>
-                <Button
-                  variant={role === "employer" ? "default" : "outline"}
-                  className={`h-20 flex flex-col transition-all duration-200 ${
-                    role === "employer"
-                      ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 shadow-lg shadow-purple-500/25"
-                      : "hover:bg-purple-50 hover:border-purple-200"
-                  }`}
-                  onClick={() => setRole("employer")}
-                >
-                  <Briefcase className="w-6 h-6 mb-2" />
-                  <span className="text-sm font-medium">Employer</span>
-                  <span className="text-xs opacity-75">Hire Workers</span>
-                </Button>
+            {/* Success Message */}
+            {showSuccessMessage && (
+              <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <div>
+                    <p className="text-green-800 font-medium">Account Created Successfully!</p>
+                    <p className="text-green-600 text-sm">Please sign in with your credentials to continue.</p>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Language Selection */}
+            {/* Email and Password */}
             <div className="space-y-3">
-              <Label htmlFor="language" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                <Globe className="w-4 h-4" />
-                Language / Lugha
-              </Label>
-              <Select value={language} onValueChange={setLanguage}>
-                <SelectTrigger className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20">
-                  <SelectValue placeholder="Select your preferred language" />
-                </SelectTrigger>
-                <SelectContent>
-                  {languages.map((lang) => (
-                    <SelectItem key={lang.value} value={lang.value} className="py-3">
-                      {lang.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label htmlFor="email" className="text-sm font-semibold text-gray-700">Email</Label>
+              <Input id="email" type="email" placeholder="you@email.com" value={email} onChange={e => setEmail(e.target.value)} className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20" />
             </div>
-
-            {/* Phone Number */}
             <div className="space-y-3">
-              <Label htmlFor="phone" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                Phone Number
-              </Label>
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="+254 700 000 000"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
-              />
+              <Label htmlFor="password" className="text-sm font-semibold text-gray-700">Password</Label>
+              <Input id="password" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20" />
             </div>
 
             {/* Sign In Button */}
             <Button
               className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/25 transition-all duration-200"
               onClick={handleLogin}
-              disabled={!phone || !language || !role}
+              disabled={!email || !password || loading}
             >
               <span className="flex items-center gap-2">
-                Sign In
+                {loading ? "Signing In..." : "Sign In"}
                 <ArrowRight className="w-4 h-4" />
               </span>
             </Button>
+
+            {submitError && <div className="text-red-600 text-sm text-center mt-2">{submitError}</div>}
+            {error && <div className="text-red-600 text-sm text-center mt-2">{error}</div>}
 
             {/* Sign Up Link */}
             <div className="text-center">
