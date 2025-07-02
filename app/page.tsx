@@ -71,7 +71,7 @@ export default function HomePage() {
             <div className="space-y-8">
               <div className="space-y-4">
                 <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200">
-                  🚀 Trusted by 50,000+ users across Africa
+                   Trusted by 50,000+ users across Africa
                 </Badge>
                 <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
                   Connect with

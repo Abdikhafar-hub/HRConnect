@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, Card_Header, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -200,7 +200,7 @@ export default function AdminDashboard() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-4">
                       <Avatar>
-                        <AvatarImage src="/placeholder.svg?height=50&width=50" />
+                        <AvatarImage src="/placeholder.png?height=50&width=50" />
                         <AvatarFallback>
                           {user.name
                             .split(" ")
@@ -306,7 +306,7 @@ export default function AdminDashboard() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-4">
                       <Avatar>
-                        <AvatarImage src="/placeholder.svg?height=50&width=50" />
+                        <AvatarImage src="/placeholder.png?height=50&width=50" />
                         <AvatarFallback>
                           {user.name
                             .split(" ")
