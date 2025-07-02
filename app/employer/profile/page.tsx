@@ -130,45 +130,43 @@ export default function EmployerProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold">My Profile</h1>
-            <Button variant={isEditing ? "default" : "outline"} onClick={() => setIsEditing(!isEditing)}>
-              {isEditing ? (
-                "Save Changes"
-              ) : (
-                <>
-                  <Edit className="w-4 h-4 mr-2" />
-                  Edit Profile
-                </>
-              )}
-            </Button>
-          </div>
+      <header className="bg-white/90 shadow-sm border-b px-0 md:px-8 py-6">
+        <div className="container mx-auto flex items-center justify-between px-4">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">My Profile</h1>
+          <Button variant={isEditing ? "default" : "outline"} onClick={() => setIsEditing(!isEditing)} className="rounded-lg shadow">
+            {isEditing ? (
+              "Save Changes"
+            ) : (
+              <>
+                <Edit className="w-4 h-4 mr-2" />
+                Edit Profile
+              </>
+            )}
+          </Button>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid lg:grid-cols-3 gap-6">
+      <div className="container mx-auto px-4 py-10">
+        <div className="grid lg:grid-cols-3 gap-8">
           {/* Profile Overview */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 space-y-8">
             {/* Basic Info Card */}
-            <Card>
-              <CardContent className="p-6 text-center">
+            <Card className="shadow-xl rounded-2xl bg-white/80 backdrop-blur-md">
+              <CardContent className="p-8 text-center">
                 <div className="relative inline-block mb-4">
-                  <Avatar className="w-24 h-24">
+                  <Avatar className="w-24 h-24 shadow-lg border-4 border-blue-200">
                     <AvatarImage src="/placeholder.svg?height=96&width=96" />
                     <AvatarFallback className="text-2xl">SJ</AvatarFallback>
                   </Avatar>
                   {isEditing && (
-                    <Button size="sm" className="absolute -bottom-2 -right-2 rounded-full w-8 h-8 p-0">
+                    <Button size="sm" className="absolute -bottom-2 -right-2 rounded-full w-8 h-8 p-0 bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow">
                       <Camera className="w-4 h-4" />
                     </Button>
                   )}
                 </div>
-                <h2 className="text-xl font-bold">{profileData.name}</h2>
+                <h2 className="text-xl font-bold text-gray-900">{profileData.name}</h2>
                 <div className="flex items-center justify-center space-x-1 mt-2">
                   <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                   <span className="font-semibold">{stats.rating}</span>
@@ -178,17 +176,17 @@ export default function EmployerProfilePage() {
                   <MapPin className="w-4 h-4" />
                   <span>{profileData.location}</span>
                 </div>
-                <Badge variant="secondary" className="mt-2 bg-blue-100 text-blue-800">
+                <Badge variant="secondary" className="mt-2 bg-blue-100 text-blue-800 rounded-full px-3 py-1">
                   {businessTypes.find((t) => t.value === profileData.businessType)?.label}
                 </Badge>
               </CardContent>
             </Card>
 
             {/* Verification Status */}
-            <Card>
+            <Card className="shadow-xl rounded-2xl bg-white/80 backdrop-blur-md">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
-                  <Shield className="w-5 h-5" />
+                  <Shield className="w-5 h-5 text-blue-600" />
                   <span>Verification Status</span>
                 </CardTitle>
               </CardHeader>
@@ -231,7 +229,7 @@ export default function EmployerProfilePage() {
             </Card>
 
             {/* Quick Stats */}
-            <Card>
+            <Card className="shadow-xl rounded-2xl bg-white/80 backdrop-blur-md">
               <CardHeader>
                 <CardTitle>Quick Stats</CardTitle>
               </CardHeader>
@@ -258,20 +256,20 @@ export default function EmployerProfilePage() {
 
           {/* Main Content */}
           <div className="lg:col-span-2">
-            <Tabs defaultValue="details" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3">
+            <Tabs defaultValue="details" className="space-y-8">
+              <TabsList className="grid w-full grid-cols-3 rounded-lg bg-gray-100 mb-4">
                 <TabsTrigger value="details">Details</TabsTrigger>
                 <TabsTrigger value="preferences">Preferences</TabsTrigger>
                 <TabsTrigger value="reviews">Reviews</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="details" className="space-y-6">
-                <Card>
+              <TabsContent value="details" className="space-y-8">
+                <Card className="shadow rounded-2xl bg-white/90 backdrop-blur-md">
                   <CardHeader>
                     <CardTitle>Personal Information</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <Label htmlFor="name">Full Name</Label>
                         <Input
@@ -279,6 +277,7 @@ export default function EmployerProfilePage() {
                           value={profileData.name}
                           onChange={(e) => setProfileData((prev) => ({ ...prev, name: e.target.value }))}
                           disabled={!isEditing}
+                          className="rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-200"
                         />
                       </div>
                       <div>
@@ -288,6 +287,7 @@ export default function EmployerProfilePage() {
                           value={profileData.phone}
                           onChange={(e) => setProfileData((prev) => ({ ...prev, phone: e.target.value }))}
                           disabled={!isEditing}
+                          className="rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-200"
                         />
                       </div>
                     </div>
@@ -299,6 +299,7 @@ export default function EmployerProfilePage() {
                         value={profileData.email}
                         onChange={(e) => setProfileData((prev) => ({ ...prev, email: e.target.value }))}
                         disabled={!isEditing}
+                        className="rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-200"
                       />
                     </div>
                     <div>
@@ -308,6 +309,7 @@ export default function EmployerProfilePage() {
                         value={profileData.location}
                         onChange={(e) => setProfileData((prev) => ({ ...prev, location: e.target.value }))}
                         disabled={!isEditing}
+                        className="rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-200"
                       />
                     </div>
                     <div>
@@ -318,15 +320,16 @@ export default function EmployerProfilePage() {
                         onChange={(e) => setProfileData((prev) => ({ ...prev, bio: e.target.value }))}
                         disabled={!isEditing}
                         rows={4}
+                        className="rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-200"
                       />
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="shadow rounded-2xl bg-white/90 backdrop-blur-md">
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
-                      <Building className="w-5 h-5" />
+                      <Building className="w-5 h-5 text-blue-600" />
                       <span>Business Information</span>
                     </CardTitle>
                   </CardHeader>
@@ -338,12 +341,12 @@ export default function EmployerProfilePage() {
                         onValueChange={(value) => setProfileData((prev) => ({ ...prev, businessType: value }))}
                         disabled={!isEditing}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-200">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           {businessTypes.map((type) => (
-                            <SelectItem key={type.value} value={type.value}>
+                            <SelectItem key={type.value} value={type.value} className="rounded-lg">
                               {type.label}
                             </SelectItem>
                           ))}
@@ -359,6 +362,7 @@ export default function EmployerProfilePage() {
                           onChange={(e) => setProfileData((prev) => ({ ...prev, companyName: e.target.value }))}
                           disabled={!isEditing}
                           placeholder="Enter company name"
+                          className="rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-200"
                         />
                       </div>
                     )}
@@ -366,8 +370,8 @@ export default function EmployerProfilePage() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="preferences" className="space-y-6">
-                <Card>
+              <TabsContent value="preferences" className="space-y-8">
+                <Card className="shadow rounded-2xl bg-white/90 backdrop-blur-md">
                   <CardHeader>
                     <CardTitle>Communication Preferences</CardTitle>
                     <CardDescription>Select languages you can communicate in</CardDescription>
@@ -382,7 +386,7 @@ export default function EmployerProfilePage() {
                             checked={profileData.preferredLanguages.includes(language)}
                             onChange={() => handleLanguageToggle(language)}
                             disabled={!isEditing}
-                            className="rounded"
+                            className="rounded border-gray-300 focus:ring-2 focus:ring-blue-200"
                           />
                           <Label htmlFor={language} className="text-sm">
                             {language}
@@ -393,10 +397,10 @@ export default function EmployerProfilePage() {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="shadow rounded-2xl bg-white/90 backdrop-blur-md">
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
-                      <CreditCard className="w-5 h-5" />
+                      <CreditCard className="w-5 h-5 text-blue-600" />
                       <span>Payment Methods</span>
                     </CardTitle>
                     <CardDescription>Select your preferred payment methods</CardDescription>
@@ -411,7 +415,7 @@ export default function EmployerProfilePage() {
                             checked={profileData.paymentMethods.includes(method)}
                             onChange={() => handlePaymentToggle(method)}
                             disabled={!isEditing}
-                            className="rounded"
+                            className="rounded border-gray-300 focus:ring-2 focus:ring-blue-200"
                           />
                           <Label htmlFor={method} className="text-sm">
                             {method}
@@ -423,8 +427,8 @@ export default function EmployerProfilePage() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="reviews" className="space-y-6">
-                <Card>
+              <TabsContent value="reviews" className="space-y-8">
+                <Card className="shadow rounded-2xl bg-white/90 backdrop-blur-md">
                   <CardHeader>
                     <CardTitle>Reviews from Workers</CardTitle>
                     <CardDescription>What workers are saying about working for you</CardDescription>
@@ -457,13 +461,13 @@ export default function EmployerProfilePage() {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="shadow rounded-2xl bg-white/90 backdrop-blur-md">
                   <CardHeader>
                     <CardTitle>Recent Job History</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {jobHistory.map((job) => (
-                      <div key={job.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                      <div key={job.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-white rounded-xl shadow border-l-4 border-blue-400">
                         <div>
                           <p className="font-medium">{job.title}</p>
                           <p className="text-sm text-gray-600">{job.worker}</p>

@@ -135,21 +135,25 @@ export default function EmployerWalletPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-2xl font-bold">My Wallet</h1>
-          <p className="text-gray-600">Manage your payments and funding</p>
+      <header className="bg-white/90 shadow-sm border-b px-0 md:px-8 py-6">
+        <div className="container mx-auto flex items-center justify-between px-4">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">My Wallet</h1>
+            <p className="text-gray-600">Manage your payments and funding</p>
+          </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-10 space-y-8">
         {/* Wallet Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card className="shadow-xl rounded-2xl border-l-4 border-l-green-500 bg-white/80 backdrop-blur-md">
             <CardContent className="p-6 text-center">
-              <Wallet className="w-10 h-10 text-green-600 mx-auto mb-3" />
+              <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <Wallet className="w-8 h-8 text-green-600" />
+              </div>
               <div className="text-3xl font-bold text-green-600">
                 KSh {walletStats.availableBalance.toLocaleString()}
               </div>
@@ -157,25 +161,31 @@ export default function EmployerWalletPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="shadow-xl rounded-2xl border-l-4 border-l-orange-500 bg-white/80 backdrop-blur-md">
             <CardContent className="p-6 text-center">
-              <Clock className="w-10 h-10 text-orange-600 mx-auto mb-3" />
+              <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <Clock className="w-8 h-8 text-orange-600" />
+              </div>
               <div className="text-3xl font-bold text-orange-600">KSh {walletStats.escrowBalance.toLocaleString()}</div>
               <div className="text-sm text-gray-600">In Escrow</div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="shadow-xl rounded-2xl border-l-4 border-l-blue-500 bg-white/80 backdrop-blur-md">
             <CardContent className="p-6 text-center">
-              <TrendingDown className="w-10 h-10 text-blue-600 mx-auto mb-3" />
+              <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <TrendingDown className="w-8 h-8 text-blue-600" />
+              </div>
               <div className="text-3xl font-bold">KSh {walletStats.thisMonth.toLocaleString()}</div>
               <div className="text-sm text-gray-600">Spent This Month</div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="shadow-xl rounded-2xl border-l-4 border-l-purple-500 bg-white/80 backdrop-blur-md">
             <CardContent className="p-6 text-center">
-              <ArrowDownLeft className="w-10 h-10 text-purple-600 mx-auto mb-3" />
+              <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <ArrowDownLeft className="w-8 h-8 text-purple-600" />
+              </div>
               <div className="text-3xl font-bold">KSh {walletStats.totalSpent.toLocaleString()}</div>
               <div className="text-sm text-gray-600">Total Spent</div>
             </CardContent>
@@ -183,12 +193,12 @@ export default function EmployerWalletPage() {
         </div>
 
         {/* Quick Actions */}
-        <Card className="mb-8">
+        <Card className="shadow-xl rounded-2xl bg-white/80 backdrop-blur-md mb-8">
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Add Money */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Add Money to Wallet</h3>
@@ -201,30 +211,29 @@ export default function EmployerWalletPage() {
                       placeholder="Enter amount"
                       value={topUpAmount}
                       onChange={(e) => setTopUpAmount(e.target.value)}
+                      className="rounded-lg border-gray-300 focus:ring-2 focus:ring-green-200"
                     />
                   </div>
                   <div>
                     <Label htmlFor="method">Payment Method</Label>
                     <Select value={topUpMethod} onValueChange={setTopUpMethod}>
-                      <SelectTrigger>
+                      <SelectTrigger className="rounded-lg border-gray-300 focus:ring-2 focus:ring-green-200">
                         <SelectValue placeholder="Select method" />
                       </SelectTrigger>
                       <SelectContent>
                         {topUpMethods.map((method) => {
                           const Icon = method.icon
                           return (
-                            <SelectItem key={method.value} value={method.value}>
-                              <div className="flex items-center space-x-2">
-                                <Icon className="w-4 h-4" />
-                                <span>{method.label}</span>
-                              </div>
+                            <SelectItem key={method.value} value={method.value} className="flex items-center gap-2">
+                              <Icon className="w-4 h-4 mr-2 text-green-600" />
+                              <span>{method.label}</span>
                             </SelectItem>
                           )
                         })}
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button className="w-full" disabled={!topUpAmount || !topUpMethod}>
+                  <Button className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-lg shadow-md" disabled={!topUpAmount || !topUpMethod}>
                     <Plus className="w-4 h-4 mr-2" />
                     Add Money
                   </Button>
@@ -236,7 +245,7 @@ export default function EmployerWalletPage() {
                 <h3 className="text-lg font-semibold">Escrow Payments</h3>
                 <div className="space-y-3">
                   {escrowPayments.slice(0, 3).map((payment) => (
-                    <div key={payment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={payment.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-50 to-white rounded-xl shadow border-l-4 border-orange-400">
                       <div>
                         <p className="font-medium text-sm">{payment.jobTitle}</p>
                         <p className="text-xs text-gray-600">{payment.worker}</p>
@@ -260,14 +269,14 @@ export default function EmployerWalletPage() {
                       <div className="text-right">
                         <p className="font-semibold text-orange-600">KSh {payment.amount.toLocaleString()}</p>
                         {payment.status === "ready_to_release" && (
-                          <Button size="sm" className="mt-1">
+                          <Button size="sm" className="mt-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg shadow">
                             Release
                           </Button>
                         )}
                       </div>
                     </div>
                   ))}
-                  <Button variant="outline" className="w-full bg-transparent">
+                  <Button variant="outline" className="w-full bg-transparent rounded-lg border-orange-200 text-orange-700 font-semibold">
                     View All Escrow
                   </Button>
                 </div>
@@ -277,186 +286,193 @@ export default function EmployerWalletPage() {
         </Card>
 
         {/* Transaction History */}
-        <Tabs defaultValue="all" className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Transaction History</h2>
-            <TabsList>
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="payments">Payments</TabsTrigger>
-              <TabsTrigger value="topups">Top Ups</TabsTrigger>
-            </TabsList>
-          </div>
+        <Card className="shadow-xl rounded-2xl bg-white/80 backdrop-blur-md">
+          <CardHeader>
+            <CardTitle>Transaction History</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="all" className="space-y-6">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
+                <h2 className="text-xl font-semibold">Recent Transactions</h2>
+                <TabsList className="rounded-lg bg-gray-100">
+                  <TabsTrigger value="all">All</TabsTrigger>
+                  <TabsTrigger value="payments">Payments</TabsTrigger>
+                  <TabsTrigger value="topups">Top Ups</TabsTrigger>
+                </TabsList>
+              </div>
 
-          <TabsContent value="all" className="space-y-4">
-            {transactions.map((transaction) => (
-              <Card key={transaction.id}>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          transaction.type === "topup" || transaction.type === "refund"
-                            ? "bg-green-100 text-green-600"
-                            : transaction.type === "escrow"
-                              ? "bg-orange-100 text-orange-600"
-                              : "bg-blue-100 text-blue-600"
-                        }`}
-                      >
-                        {transaction.type === "topup" || transaction.type === "refund" ? (
-                          <ArrowUpRight className="w-5 h-5" />
-                        ) : (
-                          <ArrowDownLeft className="w-5 h-5" />
-                        )}
-                      </div>
-                      <div>
-                        <p className="font-medium">{transaction.description}</p>
-                        <div className="flex items-center space-x-2 text-sm text-gray-600">
-                          <Calendar className="w-3 h-3" />
-                          <span>
-                            {transaction.date} at {transaction.time}
-                          </span>
-                        </div>
-                        {transaction.jobId && <p className="text-xs text-gray-500">Job ID: {transaction.jobId}</p>}
-                        {transaction.reference && <p className="text-xs text-gray-500">Ref: {transaction.reference}</p>}
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div
-                        className={`text-lg font-bold ${
-                          transaction.amount > 0
-                            ? "text-green-600"
-                            : transaction.type === "escrow"
-                              ? "text-orange-600"
-                              : "text-blue-600"
-                        }`}
-                      >
-                        {transaction.amount > 0 ? "+" : ""}KSh {Math.abs(transaction.amount).toLocaleString()}
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        {transaction.status === "completed" ? (
-                          <CheckCircle className="w-4 h-4 text-green-600" />
-                        ) : transaction.status === "held" ? (
-                          <Clock className="w-4 h-4 text-orange-600" />
-                        ) : (
-                          <AlertCircle className="w-4 h-4 text-red-600" />
-                        )}
-                        <Badge
-                          variant={
-                            transaction.status === "completed"
-                              ? "secondary"
-                              : transaction.status === "held"
-                                ? "default"
-                                : "destructive"
-                          }
-                          className={
-                            transaction.status === "completed"
-                              ? "bg-green-100 text-green-800"
-                              : transaction.status === "held"
-                                ? "bg-orange-100 text-orange-800"
-                                : ""
-                          }
-                        >
-                          {transaction.status === "held" ? "In Escrow" : transaction.status}
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </TabsContent>
-
-          <TabsContent value="payments" className="space-y-4">
-            {transactions
-              .filter((t) => t.type === "payment" || t.type === "escrow")
-              .map((transaction) => (
-                <Card key={transaction.id}>
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            transaction.type === "escrow"
-                              ? "bg-orange-100 text-orange-600"
-                              : "bg-blue-100 text-blue-600"
-                          }`}
-                        >
-                          <ArrowDownLeft className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <p className="font-medium">{transaction.description}</p>
-                          <div className="flex items-center space-x-2 text-sm text-gray-600">
-                            <Calendar className="w-3 h-3" />
-                            <span>
-                              {transaction.date} at {transaction.time}
-                            </span>
+              <TabsContent value="all" className="space-y-4">
+                {transactions.map((transaction) => (
+                  <Card key={transaction.id} className="rounded-xl shadow border-l-4 bg-white/90 backdrop-blur-md border-blue-200">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center shadow ${
+                              transaction.type === "topup" || transaction.type === "refund"
+                                ? "bg-green-100 text-green-600"
+                                : transaction.type === "escrow"
+                                  ? "bg-orange-100 text-orange-600"
+                                  : "bg-blue-100 text-blue-600"
+                            }`}
+                          >
+                            {transaction.type === "topup" || transaction.type === "refund" ? (
+                              <ArrowUpRight className="w-5 h-5" />
+                            ) : (
+                              <ArrowDownLeft className="w-5 h-5" />
+                            )}
                           </div>
-                          <p className="text-xs text-gray-500">Job ID: {transaction.jobId}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div
-                          className={`text-lg font-bold ${
-                            transaction.type === "escrow" ? "text-orange-600" : "text-blue-600"
-                          }`}
-                        >
-                          KSh {Math.abs(transaction.amount).toLocaleString()}
-                        </div>
-                        <Badge
-                          variant={transaction.status === "completed" ? "secondary" : "default"}
-                          className={
-                            transaction.status === "completed"
-                              ? "bg-green-100 text-green-800"
-                              : transaction.status === "held"
-                                ? "bg-orange-100 text-orange-800"
-                                : ""
-                          }
-                        >
-                          {transaction.status === "held" ? "In Escrow" : transaction.status}
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-          </TabsContent>
-
-          <TabsContent value="topups" className="space-y-4">
-            {transactions
-              .filter((t) => t.type === "topup" || t.type === "refund")
-              .map((transaction) => (
-                <Card key={transaction.id}>
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
-                          <ArrowUpRight className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <p className="font-medium">{transaction.description}</p>
-                          <div className="flex items-center space-x-2 text-sm text-gray-600">
-                            <Calendar className="w-3 h-3" />
-                            <span>
-                              {transaction.date} at {transaction.time}
-                            </span>
+                          <div>
+                            <p className="font-medium">{transaction.description}</p>
+                            <div className="flex items-center space-x-2 text-sm text-gray-600">
+                              <Calendar className="w-3 h-3" />
+                              <span>
+                                {transaction.date} at {transaction.time}
+                              </span>
+                            </div>
+                            {transaction.jobId && <p className="text-xs text-gray-500">Job ID: {transaction.jobId}</p>}
+                            {transaction.reference && <p className="text-xs text-gray-500">Ref: {transaction.reference}</p>}
                           </div>
-                          <p className="text-xs text-gray-500">Ref: {transaction.reference}</p>
+                        </div>
+                        <div className="text-right">
+                          <div
+                            className={`text-lg font-bold ${
+                              transaction.amount > 0
+                                ? "text-green-600"
+                                : transaction.type === "escrow"
+                                  ? "text-orange-600"
+                                  : "text-blue-600"
+                            }`}
+                          >
+                            {transaction.amount > 0 ? "+" : ""}KSh {Math.abs(transaction.amount).toLocaleString()}
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            {transaction.status === "completed" ? (
+                              <CheckCircle className="w-4 h-4 text-green-600" />
+                            ) : transaction.status === "held" ? (
+                              <Clock className="w-4 h-4 text-orange-600" />
+                            ) : (
+                              <AlertCircle className="w-4 h-4 text-red-600" />
+                            )}
+                            <Badge
+                              variant={
+                                transaction.status === "completed"
+                                  ? "secondary"
+                                  : transaction.status === "held"
+                                    ? "default"
+                                    : "destructive"
+                              }
+                              className={
+                                transaction.status === "completed"
+                                  ? "bg-green-100 text-green-800"
+                                  : transaction.status === "held"
+                                    ? "bg-orange-100 text-orange-800"
+                                    : ""
+                              }
+                            >
+                              {transaction.status === "held" ? "In Escrow" : transaction.status}
+                            </Badge>
+                          </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-green-600">
-                          +KSh {transaction.amount.toLocaleString()}
+                    </CardContent>
+                  </Card>
+                ))}
+              </TabsContent>
+
+              <TabsContent value="payments" className="space-y-4">
+                {transactions
+                  .filter((t) => t.type === "payment" || t.type === "escrow")
+                  .map((transaction) => (
+                    <Card key={transaction.id} className="rounded-xl shadow border-l-4 bg-white/90 backdrop-blur-md border-blue-200">
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div
+                              className={`w-10 h-10 rounded-xl flex items-center justify-center shadow ${
+                                transaction.type === "escrow"
+                                  ? "bg-orange-100 text-orange-600"
+                                  : "bg-blue-100 text-blue-600"
+                              }`}
+                            >
+                              <ArrowDownLeft className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <p className="font-medium">{transaction.description}</p>
+                              <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                <Calendar className="w-3 h-3" />
+                                <span>
+                                  {transaction.date} at {transaction.time}
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-500">Job ID: {transaction.jobId}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div
+                              className={`text-lg font-bold ${
+                                transaction.type === "escrow" ? "text-orange-600" : "text-blue-600"}
+                              `}
+                            >
+                              KSh {Math.abs(transaction.amount).toLocaleString()}
+                            </div>
+                            <Badge
+                              variant={transaction.status === "completed" ? "secondary" : "default"}
+                              className={
+                                transaction.status === "completed"
+                                  ? "bg-green-100 text-green-800"
+                                  : transaction.status === "held"
+                                    ? "bg-orange-100 text-orange-800"
+                                    : ""
+                              }
+                            >
+                              {transaction.status === "held" ? "In Escrow" : transaction.status}
+                            </Badge>
+                          </div>
                         </div>
-                        <Badge variant="secondary" className="bg-green-100 text-green-800">
-                          {transaction.status}
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-          </TabsContent>
-        </Tabs>
+                      </CardContent>
+                    </Card>
+                  ))}
+              </TabsContent>
+
+              <TabsContent value="topups" className="space-y-4">
+                {transactions
+                  .filter((t) => t.type === "topup" || t.type === "refund")
+                  .map((transaction) => (
+                    <Card key={transaction.id} className="rounded-xl shadow border-l-4 bg-white/90 backdrop-blur-md border-green-200">
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center shadow">
+                              <ArrowUpRight className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <p className="font-medium">{transaction.description}</p>
+                              <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                <Calendar className="w-3 h-3" />
+                                <span>
+                                  {transaction.date} at {transaction.time}
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-500">Ref: {transaction.reference}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-green-600">
+                              +KSh {transaction.amount.toLocaleString()}
+                            </div>
+                            <Badge variant="secondary" className="bg-green-100 text-green-800">
+                              {transaction.status}
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

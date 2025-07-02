@@ -11,6 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { MapPin, Calendar, Star, Shield, Camera, Edit, CheckCircle, Clock, Languages, Briefcase } from "lucide-react"
+import clsx from "clsx"
 
 export default function WorkerProfilePage() {
   const [isEditing, setIsEditing] = useState(false)
@@ -111,49 +112,46 @@ export default function WorkerProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       {/* Header */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-6">
+      <header className="bg-white/80 backdrop-blur-md border-b sticky top-0 z-50 shadow-md">
+        <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold">My Profile</h1>
-            <Button variant={isEditing ? "default" : "outline"} onClick={() => setIsEditing(!isEditing)}>
+            <h1 className="text-3xl font-extrabold tracking-tight text-blue-700 mb-0 drop-shadow-sm">My Profile</h1>
+            <Button variant={isEditing ? "default" : "outline"} className="rounded-full font-semibold px-6 py-2 text-base shadow" onClick={() => setIsEditing(!isEditing)}>
               {isEditing ? (
                 "Save Changes"
               ) : (
-                <>
-                  <Edit className="w-4 h-4 mr-2" />
-                  Edit Profile
-                </>
+                <><Edit className="w-4 h-4 mr-2" />Edit Profile</>
               )}
             </Button>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid lg:grid-cols-3 gap-6">
+      <div className="container mx-auto px-4 py-10">
+        <div className="grid lg:grid-cols-3 gap-8">
           {/* Profile Overview */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 space-y-8">
             {/* Basic Info Card */}
-            <Card>
-              <CardContent className="p-6 text-center">
+            <Card className="bg-gradient-to-br from-blue-100 to-white/80 shadow-xl rounded-2xl animate-fade-in-up">
+              <CardContent className="p-8 text-center">
                 <div className="relative inline-block mb-4">
-                  <Avatar className="w-24 h-24">
+                  <Avatar className="w-28 h-28 shadow-lg border-4 border-white mx-auto">
                     <AvatarImage src="/placeholder.svg?height=96&width=96" />
                     <AvatarFallback className="text-2xl">JM</AvatarFallback>
                   </Avatar>
                   {isEditing && (
-                    <Button size="sm" className="absolute -bottom-2 -right-2 rounded-full w-8 h-8 p-0">
-                      <Camera className="w-4 h-4" />
+                    <Button size="sm" className="absolute -bottom-2 -right-2 rounded-full w-9 h-9 p-0 bg-blue-600 hover:bg-blue-700 text-white shadow-lg">
+                      <Camera className="w-5 h-5" />
                     </Button>
                   )}
                 </div>
-                <h2 className="text-xl font-bold">{profileData.name}</h2>
+                <h2 className="text-2xl font-bold text-blue-900 mb-1">{profileData.name}</h2>
                 <div className="flex items-center justify-center space-x-1 mt-2">
                   <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                  <span className="font-semibold">{stats.rating}</span>
-                  <span className="text-gray-600">({stats.totalJobs} jobs)</span>
+                  <span className="font-semibold text-lg text-gray-800">{stats.rating}</span>
+                  <span className="text-gray-500">({stats.totalJobs} jobs)</span>
                 </div>
                 <div className="flex items-center justify-center space-x-2 mt-2 text-gray-600">
                   <MapPin className="w-4 h-4" />
@@ -163,9 +161,9 @@ export default function WorkerProfilePage() {
             </Card>
 
             {/* Verification Status */}
-            <Card>
+            <Card className="bg-white/90 shadow-xl rounded-2xl animate-fade-in-up">
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
+                <CardTitle className="flex items-center space-x-2 text-blue-700">
                   <Shield className="w-5 h-5" />
                   <span>Verification Status</span>
                 </CardTitle>
@@ -192,9 +190,7 @@ export default function WorkerProfilePage() {
                   {verificationStatus.addressVerified ? (
                     <CheckCircle className="w-5 h-5 text-green-600" />
                   ) : (
-                    <Button variant="link" className="p-0 h-auto text-blue-600 text-sm">
-                      Verify Now
-                    </Button>
+                    <Button variant="link" className="p-0 h-auto text-blue-600 text-sm">Verify Now</Button>
                   )}
                 </div>
                 <div className="flex items-center justify-between">
@@ -209,22 +205,22 @@ export default function WorkerProfilePage() {
             </Card>
 
             {/* Quick Stats */}
-            <Card>
+            <Card className="bg-white/90 shadow-xl rounded-2xl animate-fade-in-up">
               <CardHeader>
-                <CardTitle>Quick Stats</CardTitle>
+                <CardTitle className="text-blue-700">Quick Stats</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-sm text-gray-600">Completion Rate</span>
-                  <span className="font-semibold">{stats.completionRate}%</span>
+                  <span className="font-semibold text-blue-700">{stats.completionRate}%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-gray-600">Response Time</span>
-                  <span className="font-semibold">{stats.responseTime}</span>
+                  <span className="font-semibold text-blue-700">{stats.responseTime}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-gray-600">Member Since</span>
-                  <span className="font-semibold">{stats.joinDate}</span>
+                  <span className="font-semibold text-blue-700">{stats.joinDate}</span>
                 </div>
               </CardContent>
             </Card>
@@ -232,17 +228,17 @@ export default function WorkerProfilePage() {
 
           {/* Main Content */}
           <div className="lg:col-span-2">
-            <Tabs defaultValue="details" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="details">Details</TabsTrigger>
-                <TabsTrigger value="skills">Skills & Availability</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews</TabsTrigger>
+            <Tabs defaultValue="details" className="space-y-8">
+              <TabsList className="flex w-full justify-center bg-blue-50 rounded-full p-1 shadow-inner mb-6">
+                <TabsTrigger value="details" className="rounded-full px-6 py-2 text-base font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-blue-700 transition-all">Details</TabsTrigger>
+                <TabsTrigger value="skills" className="rounded-full px-6 py-2 text-base font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-blue-700 transition-all">Skills & Availability</TabsTrigger>
+                <TabsTrigger value="reviews" className="rounded-full px-6 py-2 text-base font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-blue-700 transition-all">Reviews</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="details" className="space-y-6">
-                <Card>
+              <TabsContent value="details" className="space-y-8">
+                <Card className="bg-white/95 shadow-xl rounded-2xl animate-fade-in-up">
                   <CardHeader>
-                    <CardTitle>Personal Information</CardTitle>
+                    <CardTitle className="text-blue-700">Personal Information</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -253,6 +249,7 @@ export default function WorkerProfilePage() {
                           value={profileData.name}
                           onChange={(e) => setProfileData((prev) => ({ ...prev, name: e.target.value }))}
                           disabled={!isEditing}
+                          className="rounded-full"
                         />
                       </div>
                       <div>
@@ -262,6 +259,7 @@ export default function WorkerProfilePage() {
                           value={profileData.phone}
                           onChange={(e) => setProfileData((prev) => ({ ...prev, phone: e.target.value }))}
                           disabled={!isEditing}
+                          className="rounded-full"
                         />
                       </div>
                     </div>
@@ -272,6 +270,7 @@ export default function WorkerProfilePage() {
                         value={profileData.location}
                         onChange={(e) => setProfileData((prev) => ({ ...prev, location: e.target.value }))}
                         disabled={!isEditing}
+                        className="rounded-full"
                       />
                     </div>
                     <div>
@@ -282,6 +281,7 @@ export default function WorkerProfilePage() {
                         onChange={(e) => setProfileData((prev) => ({ ...prev, bio: e.target.value }))}
                         disabled={!isEditing}
                         rows={4}
+                        className="rounded-2xl"
                       />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -292,7 +292,7 @@ export default function WorkerProfilePage() {
                           onValueChange={(value) => setProfileData((prev) => ({ ...prev, experience: value }))}
                           disabled={!isEditing}
                         >
-                          <SelectTrigger>
+                          <SelectTrigger className="rounded-full">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -311,6 +311,7 @@ export default function WorkerProfilePage() {
                           value={profileData.hourlyRate}
                           onChange={(e) => setProfileData((prev) => ({ ...prev, hourlyRate: e.target.value }))}
                           disabled={!isEditing}
+                          className="rounded-full"
                         />
                       </div>
                     </div>
@@ -318,10 +319,10 @@ export default function WorkerProfilePage() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="skills" className="space-y-6">
-                <Card>
+              <TabsContent value="skills" className="space-y-8">
+                <Card className="bg-white/95 shadow-xl rounded-2xl animate-fade-in-up">
                   <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
+                    <CardTitle className="flex items-center space-x-2 text-blue-700">
                       <Briefcase className="w-5 h-5" />
                       <span>Skills & Services</span>
                     </CardTitle>
@@ -346,9 +347,9 @@ export default function WorkerProfilePage() {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="bg-white/95 shadow-xl rounded-2xl animate-fade-in-up">
                   <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
+                    <CardTitle className="flex items-center space-x-2 text-blue-700">
                       <Languages className="w-5 h-5" />
                       <span>Languages</span>
                     </CardTitle>
@@ -373,9 +374,9 @@ export default function WorkerProfilePage() {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="bg-white/95 shadow-xl rounded-2xl animate-fade-in-up">
                   <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
+                    <CardTitle className="flex items-center space-x-2 text-blue-700">
                       <Calendar className="w-5 h-5" />
                       <span>Availability</span>
                     </CardTitle>
@@ -401,10 +402,10 @@ export default function WorkerProfilePage() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="reviews" className="space-y-6">
-                <Card>
+              <TabsContent value="reviews" className="space-y-8">
+                <Card className="bg-white/95 shadow-xl rounded-2xl animate-fade-in-up">
                   <CardHeader>
-                    <CardTitle>Recent Reviews</CardTitle>
+                    <CardTitle className="text-blue-700">Recent Reviews</CardTitle>
                     <CardDescription>What employers are saying about your work</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">

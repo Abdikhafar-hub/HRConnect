@@ -189,22 +189,22 @@ export default function EmployerRatingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-2xl font-bold">Ratings & Reviews</h1>
+      <header className="bg-white/90 shadow-sm border-b px-0 md:px-8 py-6">
+        <div className="container mx-auto px-4">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Ratings & Reviews</h1>
           <p className="text-gray-600">See what workers are saying about working for you</p>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-10">
         {/* Rating Overview */}
-        <div className="grid lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid lg:grid-cols-3 gap-8 mb-10">
           {/* Overall Rating */}
-          <Card>
-            <CardContent className="p-6 text-center">
-              <div className="text-5xl font-bold text-yellow-600 mb-2">{ratingStats.overallRating}</div>
+          <Card className="shadow-xl rounded-2xl bg-white/80 backdrop-blur-md">
+            <CardContent className="p-8 text-center">
+              <div className="text-5xl font-bold text-yellow-600 mb-2 drop-shadow">{ratingStats.overallRating}</div>
               <div className="flex items-center justify-center space-x-1 mb-2">
                 {[...Array(5)].map((_, i) => (
                   <Star
@@ -220,11 +220,11 @@ export default function EmployerRatingsPage() {
           </Card>
 
           {/* Rating Breakdown */}
-          <Card>
+          <Card className="shadow-xl rounded-2xl bg-white/80 backdrop-blur-md">
             <CardHeader>
               <CardTitle>Rating Breakdown</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-4">
               {[
                 { stars: 5, count: ratingStats.fiveStars },
                 { stars: 4, count: ratingStats.fourStars },
@@ -234,10 +234,10 @@ export default function EmployerRatingsPage() {
               ].map((item) => (
                 <div key={item.stars} className="flex items-center space-x-3">
                   <div className="flex items-center space-x-1 w-16">
-                    <span className="text-sm">{item.stars}</span>
+                    <span className="text-sm font-semibold">{item.stars}</span>
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   </div>
-                  <Progress value={getRatingPercentage(item.count)} className="flex-1" />
+                  <Progress value={getRatingPercentage(item.count)} className="flex-1 bg-gray-200 rounded-full h-2" />
                   <span className="text-sm text-gray-600 w-8">{item.count}</span>
                 </div>
               ))}
@@ -245,7 +245,7 @@ export default function EmployerRatingsPage() {
           </Card>
 
           {/* Category Ratings */}
-          <Card>
+          <Card className="shadow-xl rounded-2xl bg-white/80 backdrop-blur-md">
             <CardHeader>
               <CardTitle>Category Ratings</CardTitle>
             </CardHeader>
@@ -283,24 +283,33 @@ export default function EmployerRatingsPage() {
         </div>
 
         {/* Main Content */}
-        <Tabs defaultValue="received" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+        <Tabs defaultValue="received" className="space-y-10">
+          <TabsList className="grid w-full grid-cols-3 rounded-lg bg-gray-100 mb-4">
             <TabsTrigger value="received">Reviews Received</TabsTrigger>
             <TabsTrigger value="given">Reviews Given</TabsTrigger>
             <TabsTrigger value="achievements">Achievements</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="received" className="space-y-6">
+          <TabsContent value="received" className="space-y-8">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold">What Workers Say About You</h2>
               <Badge variant="secondary">{workerReviews.length} reviews</Badge>
             </div>
 
             {workerReviews.map((review) => (
-              <Car key={review.id}>
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <Avatar>
+              <div
+                key={review.id}
+                className="relative group rounded-2xl bg-white/90 backdrop-blur-md shadow-xl border-2 border-transparent hover:border-blue-400 hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                style={{
+                  boxShadow:
+                    '0 8px 32px 0 rgba(31, 38, 135, 0.15), 0 1.5px 8px 0 rgba(80, 120, 255, 0.08)',
+                  borderImage: 'linear-gradient(90deg, #60a5fa 0%, #a78bfa 100%) 1',
+                }}
+              >
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{background: 'linear-gradient(120deg, #dbeafe55 0%, #f3e8ff55 100%)'}} />
+                <CardContent className="relative z-10 p-8">
+                  <div className="flex items-start space-x-6">
+                    <Avatar className="w-14 h-14 shadow border-2 border-blue-100">
                       <AvatarImage src={review.workerPhoto || "/placeholder.svg"} />
                       <AvatarFallback>
                         {review.worker
@@ -312,7 +321,7 @@ export default function EmployerRatingsPage() {
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h3 className="font-semibold">{review.worker}</h3>
+                          <h3 className="font-semibold text-lg">{review.worker}</h3>
                           <p className="text-sm text-gray-600">{review.jobTitle}</p>
                         </div>
                         <div className="text-right">
@@ -377,21 +386,30 @@ export default function EmployerRatingsPage() {
                     </div>
                   </div>
                 </CardContent>
-              </Car>
+              </div>
             ))}
           </TabsContent>
 
-          <TabsContent value="given" className="space-y-6">
+          <TabsContent value="given" className="space-y-8">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold">Reviews You've Given</h2>
               <Badge variant="secondary">{myRatings.length} reviews</Badge>
             </div>
 
             {myRatings.map((rating) => (
-              <Card key={rating.id}>
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <Avatar>
+              <div
+                key={rating.id}
+                className="relative group rounded-2xl bg-white/90 backdrop-blur-md shadow-xl border-2 border-transparent hover:border-purple-400 hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                style={{
+                  boxShadow:
+                    '0 8px 32px 0 rgba(120, 80, 255, 0.10), 0 1.5px 8px 0 rgba(80, 120, 255, 0.08)',
+                  borderImage: 'linear-gradient(90deg, #a78bfa 0%, #60a5fa 100%) 1',
+                }}
+              >
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{background: 'linear-gradient(120deg, #ede9fe55 0%, #dbeafe55 100%)'}} />
+                <CardContent className="relative z-10 p-8">
+                  <div className="flex items-start space-x-6">
+                    <Avatar className="w-14 h-14 shadow border-2 border-blue-100">
                       <AvatarImage src={rating.workerPhoto || "/placeholder.svg"} />
                       <AvatarFallback>
                         {rating.worker
@@ -403,7 +421,7 @@ export default function EmployerRatingsPage() {
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h3 className="font-semibold">{rating.worker}</h3>
+                          <h3 className="font-semibold text-lg">{rating.worker}</h3>
                           <p className="text-sm text-gray-600">{rating.jobTitle}</p>
                         </div>
                         <div className="text-right">
@@ -457,29 +475,29 @@ export default function EmployerRatingsPage() {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
+              </div>
             ))}
           </TabsContent>
 
-          <TabsContent value="achievements" className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
+          <TabsContent value="achievements" className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-8">
               {achievements.map((achievement) => {
                 const Icon = achievement.icon
                 return (
-                  <Card key={achievement.id} className={achievement.earned ? "border-yellow-200 bg-yellow-50" : ""}>
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
+                  <Card key={achievement.id} className={`shadow rounded-2xl bg-white/90 backdrop-blur-md ${achievement.earned ? "border-yellow-200 bg-yellow-50" : ""}`}>
+                    <CardContent className="p-8">
+                      <div className="flex items-start space-x-6">
                         <div
-                          className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                          className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg ${
                             achievement.earned ? "bg-yellow-100 text-yellow-600" : "bg-gray-100 text-gray-400"
                           }`}
                         >
-                          <Icon className="w-6 h-6" />
+                          <Icon className="w-7 h-7" />
                         </div>
                         <div className="flex-1">
                           <div className="flex items-start justify-between">
                             <div>
-                              <h3 className="font-semibold">{achievement.title}</h3>
+                              <h3 className="font-semibold text-lg">{achievement.title}</h3>
                               <p className="text-sm text-gray-600">{achievement.description}</p>
                             </div>
                             {achievement.earned && (

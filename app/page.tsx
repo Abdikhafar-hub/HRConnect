@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -19,8 +20,117 @@ import {
   Award,
   Zap,
 } from "lucide-react"
+import React, { useRef, useEffect, useState } from "react"
+
+function useCountUp(
+  target: number,
+  duration: number,
+  startWhen: boolean
+) {
+  const [count, setCount] = useState(0)
+  const raf = useRef<number | null>(null)
+
+  useEffect(() => {
+    if (!startWhen) return
+    let start: number | null = null
+    const isDecimal = typeof target === "number" && !Number.isInteger(target)
+    const decimals = isDecimal ? 1 : 0
+    const step = (timestamp: number) => {
+      if (!start) start = timestamp
+      const progress = Math.min(((timestamp - (start as number)) / (duration * 1000)), 1)
+      const value = isDecimal
+        ? +(progress * target).toFixed(decimals)
+        : Math.floor(progress * target)
+      setCount(value)
+      if (progress < 1) {
+        raf.current = requestAnimationFrame(step)
+      } else {
+        setCount(target)
+      }
+    }
+    raf.current = requestAnimationFrame(step)
+    return () => {
+      if (raf.current !== null) cancelAnimationFrame(raf.current)
+    }
+  }, [target, duration, startWhen])
+
+  // Format with commas
+  if (typeof count === "number" && !isNaN(count)) {
+    if (typeof target === "number" && !Number.isInteger(target)) {
+      return count.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+    }
+    return count.toLocaleString()
+  }
+  return count
+}
 
 export default function HomePage() {
+  // Add icons for steps
+  const workerSteps = [
+    {
+      icon: "📱",
+      title: "Sign Up & Verify",
+      desc: "Create your profile with phone verification and ID upload. Add your skills, experience, and availability.",
+      color: "text-blue-600",
+    },
+    {
+      icon: "🧰",
+      title: "Browse & Apply",
+      desc: "Browse jobs in your area or get matched automatically. Apply with one tap and chat with employers.",
+      color: "text-blue-600",
+    },
+    {
+      icon: "💰",
+      title: "Work & Earn",
+      desc: "Complete jobs safely with digital contracts. Get paid instantly to your mobile wallet upon completion.",
+      color: "text-blue-600",
+    },
+  ]
+  const employerSteps = [
+    {
+      icon: "📝",
+      title: "Post Your Job",
+      desc: "Describe your job requirements, budget, and timeline. Our system will find the best matches for you.",
+      color: "text-green-600",
+    },
+    {
+      icon: "🔍",
+      title: "Review & Select",
+      desc: "Review applications from verified workers. Check ratings, reviews, and previous work samples.",
+      color: "text-green-600",
+    },
+    {
+      icon: "🤝",
+      title: "Hire & Pay Securely",
+      desc: "Create digital contracts and pay through our secure escrow system. Release payment when satisfied.",
+      color: "text-green-600",
+    },
+  ]
+
+  // Stats animation logic
+  const statsRef = useRef(null)
+  const [startCount, setStartCount] = useState(false)
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStartCount(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.4 }
+    )
+    if (statsRef.current) {
+      observer.observe(statsRef.current)
+    }
+    return () => observer.disconnect()
+  }, [])
+
+  const workers = useCountUp(50000, 2.5, startCount)
+  const jobs = useCountUp(25000, 2.5, startCount)
+  const rating = useCountUp(4.9, 2.5, startCount)
+  const countries = useCountUp(15, 2.5, startCount)
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -64,24 +174,33 @@ export default function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 min-h-screen flex items-center">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('https://res.cloudinary.com/ddkkfumkl/image/upload/v1751375796/maids_lqzdjm.png')`
+          }}
+        />
+        {/* Overlay for text readability */}
+        <div className="absolute inset-0 bg-black/60" />
         <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
-        <div className="container mx-auto px-4 py-20 lg:py-32">
+        <div className="container mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div className="space-y-4">
                 <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200">
                    Trusted by 50,000+ users across Africa
                 </Badge>
-                <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight drop-shadow-2xl shadow-black">
                   Connect with
-                  <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
                     {" "}
                     Africa's{" "}
                   </span>
                   Best Workers
                 </h1>
-                <p className="text-xl text-gray-600 leading-relaxed">
+                <p className="text-xl text-white leading-relaxed drop-shadow-2xl shadow-black">
                   The most trusted platform connecting employers with skilled blue-collar workers across Africa. Find
                   reliable work or hire verified professionals in your area.
                 </p>
@@ -101,7 +220,7 @@ export default function HomePage() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="w-full sm:w-auto border-2 border-purple-200 hover:border-purple-300 hover:bg-purple-50 text-lg px-8 py-6 bg-transparent"
+                    className="w-full sm:w-auto border-2 border-white hover:border-white hover:bg-white hover:text-blue-600 text-lg px-8 py-6 bg-transparent text-white"
                   >
                     <Briefcase className="w-5 h-5 mr-2" />
                     Hire Workers
@@ -111,65 +230,53 @@ export default function HomePage() {
 
               <div className="flex items-center space-x-8 pt-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">50K+</div>
-                  <div className="text-sm text-gray-600">Active Users</div>
+                  <div className="text-2xl font-bold text-white drop-shadow-2xl shadow-black">50K+</div>
+                  <div className="text-sm text-white/90 drop-shadow-2xl shadow-black">Active Users</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">25K+</div>
-                  <div className="text-sm text-gray-600">Jobs Completed</div>
+                  <div className="text-2xl font-bold text-white drop-shadow-2xl shadow-black">25K+</div>
+                  <div className="text-sm text-white/90 drop-shadow-2xl shadow-black">Jobs Completed</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">4.9★</div>
-                  <div className="text-sm text-gray-600">Average Rating</div>
+                  <div className="text-2xl font-bold text-white drop-shadow-2xl shadow-black">4.9★</div>
+                  <div className="text-sm text-white/90 drop-shadow-2xl shadow-black">Average Rating</div>
                 </div>
               </div>
-            </div>
-
-            <div className="relative">
-              <div className="relative z-10">
-                <img
-                  src="/placeholder.svg?height=600&width=500"
-                  alt="Workers using WorkConnect platform"
-                  className="rounded-2xl shadow-2xl"
-                />
-              </div>
-              <div className="absolute -top-4 -right-4 w-72 h-72 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
-              <div className="absolute -bottom-8 -left-4 w-72 h-72 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
             </div>
           </div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-gray-50" ref={statsRef}>
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-blue-600" />
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">50,000+</div>
+              <div id="workers-count" className="text-3xl font-bold text-gray-900 mb-2" aria-label="50,000+ Registered Workers">{workers}+</div>
               <div className="text-gray-600">Registered Workers</div>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Briefcase className="w-8 h-8 text-green-600" />
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">25,000+</div>
+              <div id="jobs-count" className="text-3xl font-bold text-gray-900 mb-2" aria-label="25,000+ Jobs Completed">{jobs}+</div>
               <div className="text-gray-600">Jobs Completed</div>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Star className="w-8 h-8 text-purple-600" />
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">4.9/5</div>
+              <div id="rating-count" className="text-3xl font-bold text-gray-900 mb-2" aria-label="4.9 out of 5">{rating}/5</div>
               <div className="text-gray-600">Average Rating</div>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Globe className="w-8 h-8 text-orange-600" />
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">15</div>
+              <div id="countries-count" className="text-3xl font-bold text-gray-900 mb-2" aria-label="15 African Countries">{countries}</div>
               <div className="text-gray-600">African Countries</div>
             </div>
           </div>
@@ -292,99 +399,53 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-16">
-            {/* For Workers */}
-            <div className="space-y-8">
-              <div className="text-center lg:text-left">
-                <h3 className="text-2xl font-bold text-blue-600 mb-4">For Job Seekers</h3>
-                <p className="text-gray-600">Find reliable work opportunities in your area</p>
+          <div className="grid lg:grid-cols-2 gap-10">
+            {/* For Workers Card */}
+            <div className="bg-white rounded-3xl shadow-2xl p-8 flex flex-col gap-8 animate-fade-in-up" style={{ minHeight: 420 }}>
+              <div className="flex items-center mb-2">
+                <span className="inline-block text-2xl mr-3">🧑‍🔧</span>
+                <h3 className="text-2xl font-bold text-blue-600">For Job Seekers</h3>
               </div>
-
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0">
-                    1
+              <p className="text-gray-600 mb-4">Find reliable work opportunities in your area</p>
+              <div className="flex flex-col gap-6">
+                {workerSteps.map((step, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="flex flex-col items-center mr-2">
+                      <span className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl font-bold mb-1 border-2 border-blue-200 animate-bounce-in">
+                        {step.icon}
+                      </span>
+                      <span className="text-xs text-blue-400 font-semibold">{i + 1}</span>
+                    </div>
+                    <div>
+                      <h4 className={`text-lg font-bold mb-1 ${step.color}`}>{step.title}</h4>
+                      <p className="text-gray-600 leading-relaxed">{step.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Sign Up & Verify</h4>
-                    <p className="text-gray-600">
-                      Create your profile with phone verification and ID upload. Add your skills, experience, and
-                      availability.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0">
-                    2
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Browse & Apply</h4>
-                    <p className="text-gray-600">
-                      Browse jobs in your area or get matched automatically. Apply with one tap and chat with employers.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0">
-                    3
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Work & Earn</h4>
-                    <p className="text-gray-600">
-                      Complete jobs safely with digital contracts. Get paid instantly to your mobile wallet upon
-                      completion.
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
-
-            {/* For Employers */}
-            <div className="space-y-8">
-              <div className="text-center lg:text-left">
-                <h3 className="text-2xl font-bold text-green-600 mb-4">For Employers</h3>
-                <p className="text-gray-600">Hire skilled workers quickly and safely</p>
+            {/* For Employers Card */}
+            <div className="bg-white rounded-3xl shadow-2xl p-8 flex flex-col gap-8 animate-fade-in-up" style={{ minHeight: 420 }}>
+              <div className="flex items-center mb-2">
+                <span className="inline-block text-2xl mr-3">🏢</span>
+                <h3 className="text-2xl font-bold text-green-600">For Employers</h3>
               </div>
-
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0">
-                    1
+              <p className="text-gray-600 mb-4">Hire skilled workers quickly and safely</p>
+              <div className="flex flex-col gap-6">
+                {employerSteps.map((step, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="flex flex-col items-center mr-2">
+                      <span className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-2xl font-bold mb-1 border-2 border-green-200 animate-bounce-in">
+                        {step.icon}
+                      </span>
+                      <span className="text-xs text-green-400 font-semibold">{i + 1}</span>
+                    </div>
+                    <div>
+                      <h4 className={`text-lg font-bold mb-1 ${step.color}`}>{step.title}</h4>
+                      <p className="text-gray-600 leading-relaxed">{step.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Post Your Job</h4>
-                    <p className="text-gray-600">
-                      Describe your job requirements, budget, and timeline. Our system will find the best matches for
-                      you.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0">
-                    2
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Review & Select</h4>
-                    <p className="text-gray-600">
-                      Review applications from verified workers. Check ratings, reviews, and previous work samples.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0">
-                    3
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Hire & Pay Securely</h4>
-                    <p className="text-gray-600">
-                      Create digital contracts and pay through our secure escrow system. Release payment when satisfied.
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -627,7 +688,7 @@ export default function HomePage() {
           <div className="border-t border-gray-800 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <div className="text-gray-400">
-                <p>&copy; 2024 WorkConnect. All rights reserved.</p>
+                <p>&copy; 2025 WorkConnect. All rights reserved.</p>
               </div>
               <div className="flex space-x-6 text-sm">
                 <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">

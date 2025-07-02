@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { Star, TrendingUp, Calendar, MessageSquare, ThumbsUp, Award } from "lucide-react"
+import clsx from "clsx"
 
 export default function WorkerRatingsPage() {
   const [ratingStats] = useState({
@@ -154,42 +155,40 @@ export default function WorkerRatingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       {/* Header */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-2xl font-bold">Ratings & Reviews</h1>
-          <p className="text-gray-600">See what employers are saying about your work</p>
+      <header className="bg-white/80 backdrop-blur-md border-b sticky top-0 z-50 shadow-md">
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-3xl font-extrabold tracking-tight text-blue-700 mb-1 drop-shadow-sm">Ratings & Reviews</h1>
+          <p className="text-lg text-gray-600">See what employers are saying about your work</p>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-10">
         {/* Rating Overview */}
-        <div className="grid lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid lg:grid-cols-3 gap-8 mb-10">
           {/* Overall Rating */}
-          <Card>
-            <CardContent className="p-6 text-center">
-              <div className="text-5xl font-bold text-yellow-600 mb-2">{ratingStats.overallRating}</div>
+          <Card className="bg-gradient-to-br from-blue-100 to-white/80 shadow-xl rounded-2xl animate-fade-in-up">
+            <CardContent className="p-8 text-center">
+              <div className="text-6xl font-extrabold text-blue-700 mb-2">{ratingStats.overallRating}</div>
               <div className="flex items-center justify-center space-x-1 mb-2">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-6 h-6 ${
-                      i < Math.floor(ratingStats.overallRating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                    }`}
+                    className={`w-7 h-7 ${i < Math.floor(ratingStats.overallRating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
                   />
                 ))}
               </div>
-              <p className="text-gray-600">{ratingStats.totalReviews} reviews</p>
+              <p className="text-gray-600 text-lg">{ratingStats.totalReviews} reviews</p>
             </CardContent>
           </Card>
 
           {/* Rating Breakdown */}
-          <Card>
+          <Card className="bg-white/90 shadow-xl rounded-2xl animate-fade-in-up">
             <CardHeader>
-              <CardTitle>Rating Breakdown</CardTitle>
+              <CardTitle className="text-blue-700">Rating Breakdown</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-4">
               {[
                 { stars: 5, count: ratingStats.fiveStars },
                 { stars: 4, count: ratingStats.fourStars },
@@ -199,48 +198,48 @@ export default function WorkerRatingsPage() {
               ].map((item) => (
                 <div key={item.stars} className="flex items-center space-x-3">
                   <div className="flex items-center space-x-1 w-16">
-                    <span className="text-sm">{item.stars}</span>
+                    <span className="text-sm font-semibold text-blue-700">{item.stars}</span>
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   </div>
-                  <Progress value={getRatingPercentage(item.count)} className="flex-1" />
-                  <span className="text-sm text-gray-600 w-8">{item.count}</span>
+                  <Progress value={getRatingPercentage(item.count)} className="flex-1 h-2 bg-blue-100" />
+                  <span className="text-sm text-gray-600 w-8 font-semibold">{item.count}</span>
                 </div>
               ))}
             </CardContent>
           </Card>
 
           {/* Category Ratings */}
-          <Card>
+          <Card className="bg-white/90 shadow-xl rounded-2xl animate-fade-in-up">
             <CardHeader>
-              <CardTitle>Category Ratings</CardTitle>
+              <CardTitle className="text-blue-700">Category Ratings</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-5">
               <div className="flex justify-between items-center">
                 <span className="text-sm">Quality of Work</span>
                 <div className="flex items-center space-x-2">
-                  <span className="font-semibold">{ratingStats.categories.quality}</span>
+                  <span className="font-semibold text-blue-700">{ratingStats.categories.quality}</span>
                   <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                 </div>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">Punctuality</span>
                 <div className="flex items-center space-x-2">
-                  <span className="font-semibold">{ratingStats.categories.punctuality}</span>
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <span className="font-semibold text-blue-700">{ratingStats.categories.punctuality}</span>
+                  <Star className="w-4 h-4 fill-green-400 text-green-400" />
                 </div>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">Communication</span>
                 <div className="flex items-center space-x-2">
-                  <span className="font-semibold">{ratingStats.categories.communication}</span>
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <span className="font-semibold text-blue-700">{ratingStats.categories.communication}</span>
+                  <Star className="w-4 h-4 fill-blue-400 text-blue-400" />
                 </div>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">Professionalism</span>
                 <div className="flex items-center space-x-2">
-                  <span className="font-semibold">{ratingStats.categories.professionalism}</span>
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <span className="font-semibold text-blue-700">{ratingStats.categories.professionalism}</span>
+                  <Star className="w-4 h-4 fill-purple-400 text-purple-400" />
                 </div>
               </div>
             </CardContent>
@@ -248,30 +247,27 @@ export default function WorkerRatingsPage() {
         </div>
 
         {/* Main Content */}
-        <Tabs defaultValue="reviews" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="reviews">All Reviews</TabsTrigger>
-            <TabsTrigger value="achievements">Achievements</TabsTrigger>
+        <Tabs defaultValue="reviews" className="space-y-8">
+          <TabsList className="flex w-full justify-center bg-blue-50 rounded-full p-1 shadow-inner mb-6">
+            <TabsTrigger value="reviews" className="rounded-full px-6 py-2 text-base font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-blue-700 transition-all">All Reviews</TabsTrigger>
+            <TabsTrigger value="achievements" className="rounded-full px-6 py-2 text-base font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-blue-700 transition-all">Achievements</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="reviews" className="space-y-6">
+          <TabsContent value="reviews" className="space-y-8">
             {recentReviews.map((review) => (
-              <Card key={review.id}>
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <Avatar>
+              <Card key={review.id} className="bg-white/95 shadow-xl rounded-2xl animate-fade-in-up">
+                <CardContent className="p-8">
+                  <div className="flex items-start space-x-6">
+                    <Avatar className="w-14 h-14 shadow border-2 border-white">
                       <AvatarImage src={review.employerPhoto || "/placeholder.svg"} />
                       <AvatarFallback>
-                        {review.employer
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
+                        {review.employer.split(" ").map((n) => n[0]).join("")}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h3 className="font-semibold">{review.employer}</h3>
+                          <h3 className="font-semibold text-lg text-blue-800">{review.employer}</h3>
                           <p className="text-sm text-gray-600">{review.jobTitle}</p>
                         </div>
                         <div className="text-right">
@@ -279,9 +275,7 @@ export default function WorkerRatingsPage() {
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
-                                className={`w-4 h-4 ${
-                                  i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                                }`}
+                                className={`w-5 h-5 ${i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
                               />
                             ))}
                           </div>
@@ -289,47 +283,49 @@ export default function WorkerRatingsPage() {
                         </div>
                       </div>
 
-                      <p className="text-gray-700 mb-4">{review.comment}</p>
+                      <div className="bg-blue-50 rounded-xl p-4 text-gray-800 mb-4 shadow-inner">
+                        {review.comment}
+                      </div>
 
                       {/* Category Ratings */}
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                         <div className="text-center">
                           <p className="text-xs text-gray-600">Quality</p>
                           <div className="flex items-center justify-center space-x-1">
-                            <span className="text-sm font-semibold">{review.categories.quality}</span>
+                            <span className="text-sm font-semibold text-blue-700">{review.categories.quality}</span>
                             <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                           </div>
                         </div>
                         <div className="text-center">
                           <p className="text-xs text-gray-600">Punctuality</p>
                           <div className="flex items-center justify-center space-x-1">
-                            <span className="text-sm font-semibold">{review.categories.punctuality}</span>
-                            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                            <span className="text-sm font-semibold text-blue-700">{review.categories.punctuality}</span>
+                            <Star className="w-3 h-3 fill-green-400 text-green-400" />
                           </div>
                         </div>
                         <div className="text-center">
                           <p className="text-xs text-gray-600">Communication</p>
                           <div className="flex items-center justify-center space-x-1">
-                            <span className="text-sm font-semibold">{review.categories.communication}</span>
-                            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                            <span className="text-sm font-semibold text-blue-700">{review.categories.communication}</span>
+                            <Star className="w-3 h-3 fill-blue-400 text-blue-400" />
                           </div>
                         </div>
                         <div className="text-center">
                           <p className="text-xs text-gray-600">Professional</p>
                           <div className="flex items-center justify-center space-x-1">
-                            <span className="text-sm font-semibold">{review.categories.professionalism}</span>
-                            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                            <span className="text-sm font-semibold text-blue-700">{review.categories.professionalism}</span>
+                            <Star className="w-3 h-3 fill-purple-400 text-purple-400" />
                           </div>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <Button variant="ghost" size="sm" className="text-gray-600">
-                          <ThumbsUp className="w-4 h-4 mr-2" />
+                        <Button variant="ghost" size="sm" className="text-green-700 hover:bg-green-100">
+                          <ThumbsUp className="w-4 h-4 mr-2 text-green-500" />
                           Helpful ({review.helpful})
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-gray-600">
-                          <MessageSquare className="w-4 h-4 mr-2" />
+                        <Button variant="ghost" size="sm" className="text-blue-700 hover:bg-blue-100">
+                          <MessageSquare className="w-4 h-4 mr-2 text-blue-500" />
                           Reply
                         </Button>
                       </div>
@@ -340,31 +336,25 @@ export default function WorkerRatingsPage() {
             ))}
           </TabsContent>
 
-          <TabsContent value="achievements" className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
+          <TabsContent value="achievements" className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-8">
               {achievements.map((achievement) => {
                 const Icon = achievement.icon
                 return (
-                  <Card key={achievement.id} className={achievement.earned ? "border-yellow-200 bg-yellow-50" : ""}>
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
-                        <div
-                          className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                            achievement.earned ? "bg-yellow-100 text-yellow-600" : "bg-gray-100 text-gray-400"
-                          }`}
-                        >
-                          <Icon className="w-6 h-6" />
+                  <Card key={achievement.id} className={clsx("rounded-2xl shadow-xl animate-fade-in-up border-0", achievement.earned ? "bg-blue-50 border-blue-200" : "bg-gray-50 border-gray-100") }>
+                    <CardContent className="p-8">
+                      <div className="flex items-start space-x-6">
+                        <div className={clsx("w-14 h-14 rounded-full flex items-center justify-center text-2xl font-bold", achievement.earned ? "bg-purple-100 text-purple-600" : "bg-gray-100 text-gray-400") }>
+                          <Icon className="w-7 h-7" />
                         </div>
                         <div className="flex-1">
                           <div className="flex items-start justify-between">
                             <div>
-                              <h3 className="font-semibold">{achievement.title}</h3>
+                              <h3 className="font-semibold text-lg text-blue-800">{achievement.title}</h3>
                               <p className="text-sm text-gray-600">{achievement.description}</p>
                             </div>
                             {achievement.earned && (
-                              <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
-                                Earned
-                              </Badge>
+                              <Badge variant="secondary" className="bg-purple-100 text-purple-800 rounded-full px-3 py-1 text-xs font-semibold">Earned</Badge>
                             )}
                           </div>
                           {achievement.earned && (
