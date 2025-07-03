@@ -53,6 +53,8 @@ app.use('/api/jobs', jobs);
 app.use('/api/applications', applications);
 app.use('/api/workers', workers);
 app.use('/api/ratings', ratings);
+app.set('trust proxy', 1);
+
 
 // Basic route
 app.get('/', (req, res) => {
