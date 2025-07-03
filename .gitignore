@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -25,3 +26,45 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+=======
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Environment variables
+.env
+
+# Database files
+*.sqlite3
+
+# Migrations
+migrations/
+
+# VSCode settings
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Coverage reports
+htmlcov/
+.coverage
+
+# Twilio temp files or any uploads
+uploads/
+
+# Python package distribution
+dist/
+build/
+*.egg-info/
+
+>>>>>>> 7c256d9f7c93363e5481a89343023de9ee6c78ce
