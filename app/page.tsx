@@ -145,12 +145,7 @@ export default function HomePage() {
             </span>
           </div>
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="#features" className="text-gray-600 hover:text-blue-600 transition-colors">
-              Features
-            </Link>
-            <Link href="#how-it-works" className="text-gray-600 hover:text-blue-600 transition-colors">
-              How It Works
-            </Link>
+          
             <Link href="#testimonials" className="text-gray-600 hover:text-blue-600 transition-colors">
               Testimonials
             </Link>
@@ -481,7 +476,7 @@ export default function HomePage() {
                     <AvatarFallback>JM</AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="font-semibold text-gray-900">James Mwangi</div>
+                    <div className="font-semibold text-gray-900">Kosgei Kipngetich</div>
                     <div className="text-sm text-gray-600">Construction Worker, Nairobi</div>
                   </div>
                 </div>
@@ -701,7 +696,7 @@ export default function HomePage() {
                   Cookie Policy
                 </Link>
               </div>
-            </div>
+            </div>Link
           </div>
         </div>
       </footer>
