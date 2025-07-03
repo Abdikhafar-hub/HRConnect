@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Environment variables
+.env
+
+# Database files
+*.sqlite3
+
+# Migrations
+migrations/
+
+# VSCode settings
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Coverage reports
+htmlcov/
+.coverage
+
+# Twilio temp files or any uploads
+uploads/
+
+# Python package distribution
+dist/
+build/
+*.egg-info/
+
