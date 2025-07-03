@@ -155,7 +155,3 @@ zope.interface==7.1.1
 # pip install supabase
 
 
-
-#pip freeze > requirements.txt
-#pip install -r requirements.txt
-#pip install -r requirements.txt -i https://pypi.org/simple
