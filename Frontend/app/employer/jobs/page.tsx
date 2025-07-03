@@ -50,7 +50,7 @@ export default function EmployerJobsPage() {
     const fetchJobs = async () => {
       setLoading(true)
       try {
-        const res = await fetch(`http://localhost:5000/api/jobs?employer=${employerId}`)
+        const res = await fetch(`https://hrconnect-xq5c.onrender.com/api/jobs?employer=${employerId}`)
         const data = await res.json()
         setJobs(data.data || [])
       } catch (e) {

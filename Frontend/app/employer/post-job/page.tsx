@@ -87,7 +87,7 @@ export default function PostJobPage() {
         // Remove employer field as it will be set by the backend from the token
       }
 
-      const res = await fetch('http://localhost:5000/api/jobs', {
+      const res = await fetch('https://hrconnect-xq5c.onrender.com/api/jobs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

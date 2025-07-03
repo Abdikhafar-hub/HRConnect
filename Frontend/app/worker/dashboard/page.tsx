@@ -36,7 +36,7 @@ export default function WorkerDashboard() {
     const fetchJobs = async () => {
       setLoading(true)
       try {
-        const res = await fetch('http://localhost:5000/api/jobs')
+        const res = await fetch('https://hrconnect-xq5c.onrender.com/api/jobs')
         const data = await res.json()
         setJobs(data.data || [])
       } catch {
